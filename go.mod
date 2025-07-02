@@ -3,11 +3,11 @@ module github.com/ternarybob/satus
 go 1.24
 
 require (
-	github.com/ternarybob/funktion v1.0.0
 	github.com/gookit/color v1.5.4
 	github.com/kkyr/fig v0.5.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/rs/zerolog v1.34.0
+	github.com/ternarybob/funktion v1.0.0
 )
 
 require (
