@@ -22,13 +22,13 @@ type AppConfig struct {
 
 type serviceconfig struct {
 	Service struct {
-		Name     string `json:"name" fig:"name" default:"Go Library"`
-		Version  string `json:"version" fig:"version" default:"0.0.1"`
-		Support  string `json:"support,omitempty" fig:"support"`
-		Slot     int    `json:"slot" fig:"slot" `
-		Scope    string `json:"scope" fig:"scope" default:"DEV"`
-		Port     int    `json:"port" fig:"port" default:"5001"`
-		Host     string `json:"host" fig:"host" default:"localhost"`
+		Name         string `json:"name" fig:"name" default:"Go Library"`
+		Version      string `json:"version" fig:"version" default:"0.0.1"`
+		Support      string `json:"support,omitempty" fig:"support"`
+		Slot         int    `json:"slot" fig:"slot" `
+		Scope        string `json:"scope" fig:"scope" default:"DEV"`
+		Port         int    `json:"port" fig:"port" default:"5001"`
+		Host         string `json:"host" fig:"host" default:"localhost"`
 		LogLevel     string `json:"loglevel" fig:"loglevel" default:"info"`
 		RestLogLevel string `json:"rest_loglevel" fig:"rest_loglevel" default:"info"`
 		LogFile      string `json:"logfile" fig:"logfile" default:""`

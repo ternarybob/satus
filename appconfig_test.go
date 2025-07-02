@@ -8,7 +8,7 @@ import (
 func TestServiceConfig_Default(t *testing.T) {
 	// Test default service config values
 	config := ServiceConfig{}
-	
+
 	// Since fig uses struct tags for defaults, we need to test with actual configuration loading
 	// For now, test the struct exists and has expected fields
 	if config.Name == "" {
@@ -23,7 +23,7 @@ func TestServiceConfig_Default(t *testing.T) {
 	if config.Url == "" {
 		config.Url = ":8080" // Default value
 	}
-	
+
 	// Test that fields are properly set
 	if config.Name != "Service" {
 		t.Errorf("Expected default Name to be 'Service', got %s", config.Name)
@@ -42,7 +42,7 @@ func TestServiceConfig_Default(t *testing.T) {
 func TestDataConfig_Default(t *testing.T) {
 	// Test default data config values
 	config := DataConfig{}
-	
+
 	// Set defaults manually for testing
 	if config.Name == "" {
 		config.Name = "Connection"
@@ -56,7 +56,7 @@ func TestDataConfig_Default(t *testing.T) {
 	if config.Database == "" {
 		config.Database = "dashs"
 	}
-	
+
 	// Test that fields are properly set
 	if config.Name != "Connection" {
 		t.Errorf("Expected default Name to be 'Connection', got %s", config.Name)
@@ -74,23 +74,23 @@ func TestDataConfig_Default(t *testing.T) {
 
 func TestEnvironmentVariableOverrides(t *testing.T) {
 	// Test environment variable processing
-	
+
 	// Test SLOT environment variable
 	os.Setenv("SLOT", "5")
 	defer os.Unsetenv("SLOT")
-	
+
 	// Test SCOPE environment variable
 	os.Setenv("SCOPE", "PRD")
 	defer os.Unsetenv("SCOPE")
-	
+
 	// Test URL environment variable
 	os.Setenv("URL", ":9090")
 	defer os.Unsetenv("URL")
-	
+
 	// Test LOGLEVEL environment variable
 	os.Setenv("LOGLEVEL", "DEBUG")
 	defer os.Unsetenv("LOGLEVEL")
-	
+
 	// Since we can't easily test the full configuration loading without a config file,
 	// we'll test that the environment variables are readable
 	if os.Getenv("SLOT") != "5" {
@@ -113,11 +113,11 @@ func TestFileExists(t *testing.T) {
 		path     string
 		expected bool
 	}{
-		{"existing file", "appconfig_test.go", true},    // This test file should exist
+		{"existing file", "appconfig_test.go", true}, // This test file should exist
 		{"non-existing file", "nonexistent.txt", false},
 		{"empty path", "", false},
 	}
-	
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := fileExists(tt.path)
@@ -133,11 +133,11 @@ func TestConstants(t *testing.T) {
 	if ConfigName != "config::applicationconfig" {
 		t.Errorf("Expected ConfigName to be 'config::applicationconfig', got %s", ConfigName)
 	}
-	
+
 	if cacheName != "config::configuration" {
 		t.Errorf("Expected cacheName to be 'config::configuration', got %s", cacheName)
 	}
-	
+
 	if loglevel != "debug" {
 		t.Errorf("Expected loglevel to be 'debug', got %s", loglevel)
 	}
@@ -148,12 +148,12 @@ func TestAppConfigStructure(t *testing.T) {
 	config := &AppConfig{
 		serviceconfig: &serviceconfig{},
 	}
-	
+
 	// Test that the structure is not nil
 	if config == nil {
 		t.Error("AppConfig should not be nil")
 	}
-	
+
 	if config.serviceconfig == nil {
 		t.Error("serviceconfig should not be nil")
 	}
@@ -169,10 +169,10 @@ func TestGetAppConfigSafety(t *testing.T) {
 			t.Logf("GetAppConfig panicked as expected in test environment: %v", r)
 		}
 	}()
-	
+
 	// This might panic if no config.yml file exists, which is fine for testing
 	config := GetAppConfig()
-	
+
 	// If we get here without panic, verify basic structure
 	if config != nil {
 		t.Logf("GetAppConfig returned config successfully")
