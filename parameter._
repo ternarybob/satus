@@ -1,0 +1,68 @@
+package satus
+
+import (
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/endpoints"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/ssm"
+)
+
+// AWS credentials should be provided via environment variables:
+// AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+
+var creds *credentials.Credentials
+
+func init() {
+	creds = credentials.NewEnvCredentials()
+}
+
+// GetParameter Get returns a decrypted string value from AWS Systems Manager Parameter Store.
+func GetParameter(name string) (string, error) {
+
+	// creds := credentials.NewEnvCredentials()
+
+	/*
+		// Retrieve the credentials value
+		credValue, err := creds.Get()
+
+		if err != nil {
+			return "", err
+		}
+
+		log.Printf("SecretAccessKey:%s", credValue.SecretAccessKey)
+	*/
+
+	sess := session.Must(session.NewSession(&aws.Config{
+		Region:                        aws.String(endpoints.ApSoutheast2RegionID),
+		CredentialsChainVerboseErrors: aws.Bool(true),
+		// Credentials: credentials.NewStaticCredentials(accessKey, secretKey, sessionToken),
+	}))
+
+	// sess := session.New(&aws.Config{Region: aws.String(endpoints.ApSoutheast2RegionID)})
+
+	svc := ssm.New(sess)
+
+	/*
+		svc := awsSSM{ssm.New(sess, &aws.Config{
+			Region: aws.String(endpoints.ApSoutheast2RegionID),
+		})}
+	*/
+
+	// sess := session.New()
+
+	// svc := ssm.New(sess, &aws.Config{Region: region})
+
+	output, err := svc.GetParameter(
+		&ssm.GetParameterInput{
+			Name:           aws.String(name),
+			WithDecryption: aws.Bool(true),
+		},
+	)
+
+	if err != nil {
+		return "", err
+	}
+
+	return aws.StringValue(output.Parameter.Value), nil
+}
