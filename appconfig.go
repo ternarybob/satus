@@ -116,7 +116,7 @@ func new() *AppConfig {
 	} else {
 		configLoaded = true
 	}
-	
+
 	// Log whether we loaded from file or used defaults
 	if !configLoaded {
 		fmt.Println(infoOutput("No config file found, using default configuration"))
