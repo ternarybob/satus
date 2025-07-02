@@ -31,6 +31,7 @@ type serviceconfig struct {
 	Service struct {
 		Name         string `json:"name" fig:"name" default:"Go Library"`
 		Version      string `json:"version" fig:"version" default:"0.0.1"`
+		Build        string `json:"build" fig:"build" default:"unknown"`
 		Support      string `json:"support,omitempty" fig:"support"`
 		Slot         int    `json:"slot" fig:"slot" `
 		Scope        string `json:"scope" fig:"scope" default:"DEV"`
