@@ -16,6 +16,13 @@ import (
 	"github.com/kkyr/fig"
 )
 
+// Version information - set at build time via ldflags
+var (
+	Version   = "dev"     // Set via -ldflags "-X main.Version=x.x.x"
+	BuildTime = "unknown" // Set via -ldflags "-X main.BuildTime=..."
+	GitCommit = "unknown" // Set via -ldflags "-X main.GitCommit=..."
+)
+
 type AppConfig struct {
 	*serviceconfig
 }
@@ -89,11 +96,30 @@ func new() *AppConfig {
 
 	var cfg serviceconfig
 
-	// Try to load config.toml first, then fall back to config.yml
+	// Try to load config.toml first, then fall back to config.yml, or use defaults if neither exists
+	configLoaded := false
 	if err := fig.Load(&cfg, fig.File("config.toml")); err != nil {
 		if err := fig.Load(&cfg, fig.File("config.yml")); err != nil {
-			panic(fmt.Sprintf("config file not found: tried config.toml and config.yml - %v", err))
+			// No config file found, initialize with default values from struct tags
+			// We'll manually set defaults since fig.Load() without a file doesn't work as expected
+			cfg.Service.Name = "Go Library"
+			cfg.Service.Version = "0.0.1"
+			cfg.Service.Scope = "DEV"
+			cfg.Service.Port = 5001
+			cfg.Service.Host = "localhost"
+			cfg.Service.LogLevel = "info"
+			cfg.Service.RestLogLevel = "info"
+			cfg.Service.LogFile = ""
+		} else {
+			configLoaded = true
 		}
+	} else {
+		configLoaded = true
+	}
+	
+	// Log whether we loaded from file or used defaults
+	if !configLoaded {
+		fmt.Println(infoOutput("No config file found, using default configuration"))
 	}
 
 	// Swarm slot
