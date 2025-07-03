@@ -15,6 +15,10 @@ config.toml
 # Output of the go coverage tool
 *.out
 
+# Test and coverage report directories
+coverage-reports/
+test-results/
+
 # Dependency directories
 vendor/
 
