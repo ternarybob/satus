@@ -7,7 +7,7 @@ require (
 	github.com/kkyr/fig v0.5.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/rs/zerolog v1.34.0
-	github.com/ternarybob/funktion v1.0.4
+	github.com/ternarybob/funktion v1.0.5
 )
 
 require (
