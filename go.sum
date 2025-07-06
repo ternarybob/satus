@@ -31,8 +31,8 @@ github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcU
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 github.com/teris-io/shortid v0.0.0-20220617161101-71ec9f2aa569 h1:xzABM9let0HLLqFypcxvLmlvEciCHL7+Lv+4vwZqecI=
 github.com/teris-io/shortid v0.0.0-20220617161101-71ec9f2aa569/go.mod h1:2Ly+NIftZN4de9zRmENdYbvPQeaVIYKWpLFStLFEBgI=
-github.com/ternarybob/funktion v1.0.1 h1:HhzoHqnlDG/GKFD8UZQP2FoVJo2yL+ENY4kgYWmUjEY=
-github.com/ternarybob/funktion v1.0.1/go.mod h1:cearFH8tcJbxRMU4cduIEZLdZuQAP2OsvdsmqLgxk7w=
+github.com/ternarybob/funktion v1.0.4 h1:VR+w+AYnyUdl8qXF7JIDe7H/gH4M9yI2uYIJrUtmeUc=
+github.com/ternarybob/funktion v1.0.4/go.mod h1:cearFH8tcJbxRMU4cduIEZLdZuQAP2OsvdsmqLgxk7w=
 github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e h1:JVG44RsyaB9T2KIHavMF/ppJZNG9ZpyihvCd0w101no=
 github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e/go.mod h1:RbqR21r5mrJuqunuUZ/Dhy/avygyECGrLceyNeo4LiM=
 golang.org/x/exp v0.0.0-20220909182711-5c715a9e8561 h1:MDc5xs78ZrZr3HMQugiXOAkSZtfTpbJLDr/lwfgO53E=
