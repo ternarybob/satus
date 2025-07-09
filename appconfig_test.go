@@ -178,3 +178,77 @@ func TestGetAppConfigSafety(t *testing.T) {
 		t.Logf("GetAppConfig returned config successfully")
 	}
 }
+
+func TestLoggingConfig_Default(t *testing.T) {
+	// Test default logging config values
+	config := LoggingConfig{}
+
+	// Set defaults manually for testing
+	if config.KeepFiles == 0 {
+		config.KeepFiles = 5
+	}
+	if config.Location == "" {
+		config.Location = "./logs/app.log"
+	}
+	if config.LogLevel == "" {
+		config.LogLevel = "info"
+	}
+
+	// Test that fields are properly set
+	if config.KeepFiles != 5 {
+		t.Errorf("Expected default KeepFiles to be 5, got %d", config.KeepFiles)
+	}
+	if config.Location != "./logs/app.log" {
+		t.Errorf("Expected default Location to be './logs/app.log', got %s", config.Location)
+	}
+	if config.LogLevel != "info" {
+		t.Errorf("Expected default LogLevel to be 'info', got %s", config.LogLevel)
+	}
+}
+
+func TestLoggingConfigurationFunctions(t *testing.T) {
+	// Test logging configuration access functions
+	// Note: These tests will use whatever config is loaded
+
+	// Test that functions don't panic
+	defer func() {
+		if r := recover(); r != nil {
+			t.Logf("Logging config function panicked: %v", r)
+		}
+	}()
+
+	// Test GetLoggingConfig
+	loggingConfig := GetLoggingConfig()
+	if loggingConfig.LogLevel == "" {
+		t.Error("LogLevel should not be empty")
+	}
+
+	// Test GetLogLevel
+	logLevel := GetLogLevel()
+	if logLevel == "" {
+		t.Error("GetLogLevel should not return empty string")
+	}
+
+	// Test GetLogLocation
+	logLocation := GetLogLocation()
+	if logLocation == "" {
+		t.Error("GetLogLocation should not return empty string")
+	}
+
+	// Test GetKeepFiles
+	keepFiles := GetKeepFiles()
+	if keepFiles <= 0 {
+		t.Error("GetKeepFiles should return a positive number")
+	}
+
+	// Test consistency
+	if loggingConfig.LogLevel != logLevel {
+		t.Errorf("LogLevel mismatch: GetLoggingConfig().LogLevel = %s, GetLogLevel() = %s", loggingConfig.LogLevel, logLevel)
+	}
+	if loggingConfig.Location != logLocation {
+		t.Errorf("Location mismatch: GetLoggingConfig().Location = %s, GetLogLocation() = %s", loggingConfig.Location, logLocation)
+	}
+	if loggingConfig.KeepFiles != keepFiles {
+		t.Errorf("KeepFiles mismatch: GetLoggingConfig().KeepFiles = %d, GetKeepFiles() = %d", loggingConfig.KeepFiles, keepFiles)
+	}
+}

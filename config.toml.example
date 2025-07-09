@@ -1,0 +1,59 @@
+[service]
+name = "my-satus-service"
+version = "1.0.0"
+support = "support@example.com"
+slot = 1
+scope = "DEV"
+port = 5001
+host = "localhost"
+rest_loglevel = "info"
+
+[logging]
+keep_files = 10
+location = "./logs/my-service.log"
+loglevel = "debug"
+
+[[services]]
+name = "api-service"
+direction = "in"
+type = "api"
+scope = "DEV"
+url = ":8080"
+mockuser = "testuser@example.com"
+connection = "main-db"
+
+[[services]]
+name = "worker-service"
+direction = "out"
+type = "worker"
+scope = "DEV"
+url = ":8081"
+mockuser = "worker@example.com"
+connection = "worker-db"
+
+[[connections]]
+name = "main-db"
+scope = ["DEV", "STG"]
+type = "postgresql"
+hosts = ["localhost"]
+port = "5432"
+database = "myapp"
+connstr = ""
+cert = ""
+key = ""
+
+[[connections]]
+name = "worker-db"
+scope = ["DEV"]
+type = "sqlite"
+hosts = ["localhost"]
+port = ""
+database = "worker.db"
+connstr = ""
+cert = ""
+key = ""
+
+[params]
+debug_mode = "true"
+max_connections = "100"
+timeout = "30s"

@@ -29,24 +29,29 @@ type AppConfig struct {
 
 type serviceconfig struct {
 	Service struct {
-		Name         string `json:"name" fig:"name" default:"Go Library"`
-		Version      string `json:"version" fig:"version" default:"0.0.1"`
-		Build        string `json:"build" fig:"build" default:"unknown"`
-		Support      string `json:"support,omitempty" fig:"support"`
-		Slot         int    `json:"slot" fig:"slot" `
-		Scope        string `json:"scope" fig:"scope" default:"DEV"`
-		Port         int    `json:"port" fig:"port" default:"5001"`
-		Host         string `json:"host" fig:"host" default:"localhost"`
-		LogLevel     string `json:"loglevel" fig:"loglevel" default:"info"`
-		RestLogLevel string `json:"rest_loglevel" fig:"rest_loglevel" default:"info"`
-		LogFile      string `json:"logfile" fig:"logfile" default:""`
+		Name    string `json:"name" fig:"name" default:"Go Library"`
+		Version string `json:"version" fig:"version" default:"0.0.1"`
+		Build   string `json:"build" fig:"build" default:"unknown"`
+		Support string `json:"support,omitempty" fig:"support"`
+		Slot    int    `json:"slot" fig:"slot" `
+		Scope   string `json:"scope" fig:"scope" default:"DEV"`
+		Port    int    `json:"port" fig:"port" default:"5001"`
+		Host    string `json:"host" fig:"host" default:"localhost"`
 	} `json:"service" fig:"service"`
+
+	Logging LoggingConfig `json:"logging" fig:"logging"`
 
 	Services []ServiceConfig `json:"services" fig:"services"`
 
 	Connections []DataConfig `json:"connections" fig:"connections"`
 
 	Params map[string]string `json:"-" fig:"params"`
+}
+
+type LoggingConfig struct {
+	KeepFiles int    `json:"keep_files" fig:"keep_files" default:"5"`
+	Location  string `json:"location" fig:"location" default:"./logs/app.log"`
+	LogLevel  string `json:"loglevel" fig:"loglevel" default:"info"`
 }
 
 type ServiceConfig struct {
@@ -57,8 +62,6 @@ type ServiceConfig struct {
 	Url        string `json:"url" fig:"url" default:":8080"`
 	Port       int    `json:"port" fig:"port" default:"8080"`
 	Host       string `json:"host" fig:"host" default:"localhost"`
-	LogLevel   string `json:"loglevel" fig:"loglevel" default:"info"`
-	LogFile    string `json:"logfile" fig:"logfile" default:""`
 	MockUser   string `json:"mockuser" fig:"mockuser" default:"mockuser@dashs.com"`
 	Connection string `json:"connection" fig:"connection" default:""`
 }
@@ -108,9 +111,10 @@ func new() *AppConfig {
 			cfg.Service.Scope = "DEV"
 			cfg.Service.Port = 5001
 			cfg.Service.Host = "localhost"
-			cfg.Service.LogLevel = "info"
-			cfg.Service.RestLogLevel = "info"
-			cfg.Service.LogFile = ""
+			// Set default logging configuration
+			cfg.Logging.LogLevel = "info"
+			cfg.Logging.KeepFiles = 5
+			cfg.Logging.Location = "./logs/app.log"
 		} else {
 			configLoaded = true
 		}
@@ -153,17 +157,15 @@ func new() *AppConfig {
 
 	}
 
-	// Logging Level
+	// Logging Configuration
 	if os.Getenv("LOGLEVEL") != "" {
 		loglevel := strings.ToUpper(os.Getenv("LOGLEVEL"))
-		cfg.Service.LogLevel = loglevel
+		cfg.Logging.LogLevel = loglevel
+	}
 
-		for key, value := range cfg.Services {
-			update := value
-			value.LogLevel = loglevel
-
-			cfg.Services[key] = update
-		}
+	// Apply default logging configuration if not set
+	if cfg.Logging.LogLevel == "" {
+		cfg.Logging.LogLevel = "info"
 	}
 
 	C := &AppConfig{&cfg}
@@ -221,6 +223,30 @@ func GetServiceDirection(serviceName string) string {
 		}
 	}
 	return "in" // default if service not found
+}
+
+// GetLoggingConfig returns the logging configuration
+func GetLoggingConfig() LoggingConfig {
+	cfg := GetAppConfig()
+	return cfg.Logging
+}
+
+// GetLogLevel returns the configured log level as a string
+func GetLogLevel() string {
+	cfg := GetAppConfig()
+	return cfg.Logging.LogLevel
+}
+
+// GetLogLocation returns the configured log file location
+func GetLogLocation() string {
+	cfg := GetAppConfig()
+	return cfg.Logging.Location
+}
+
+// GetKeepFiles returns the number of log files to keep
+func GetKeepFiles() int {
+	cfg := GetAppConfig()
+	return cfg.Logging.KeepFiles
 }
 
 func fileExists(path string) bool {
